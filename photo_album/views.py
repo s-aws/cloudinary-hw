@@ -3,7 +3,7 @@ import json
 import six
 from cloudinary import api  # Only required for creating upload presets on the fly
 from cloudinary.forms import cl_init_js_callbacks
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from .forms import PhotoForm, PhotoDirectForm, PhotoUnsignedDirectForm
@@ -20,6 +20,8 @@ def list(request):
 
     # The different transformations to present
     samples = [
+        dict(crop="fit", format="jpg", overlay="ktwsgtfb7pflzhhowhxp"),
+        dict(crop="fit", format="jpg", height=150, width=150, transformation=[dict(effect="saturation:150")], overlay="ktwsgtfb7pflzhhowhxp"),
         dict(crop="fill", radius=10),
         dict(crop="scale"),
         dict(crop="fit", format="png"),
@@ -78,3 +80,7 @@ def direct_upload_complete(request):
         ret = dict(errors=form.errors)
 
     return HttpResponse(json.dumps(ret), content_type='application/json')
+
+def delete(request):
+    Photo.objects.get(id=request.GET.get("id")).delete()
+    return HttpResponseRedirect('/list')
