@@ -11,13 +11,13 @@ class PhotoForm(ModelForm):
     class Meta:
         model = Photo
         fields = '__all__'
-
+    
         ## modified
     image = CloudinaryFileField( # shamelessly stolen from https://cloudinary.com/documentation/django_image_and_video_upload#server_side_upload
-        options = { 
-            'tags': 'esayche_tag', # tag
-            'scale': 'limit', 'width': 500, 'height': 500, # enforce 500 width and height (probably not the best if an image is smaller...)
-        })
+        options = dict(
+            tags='esayche_tag', # tag
+            crop='limit', width=500, height=500# no more squish even though i liked squish
+        ))
         ## end modification
 
 class PhotoDirectForm(PhotoForm):
